@@ -9,7 +9,7 @@ def validNumber(n: str) -> bool:
         return False
 
 
-def findMissingUtil(arr, low, high, diff):
+def find(arr, low, high, diff):
 
     # Find index of middle element
     mid = int(low + (high - low) / 2)
@@ -27,12 +27,6 @@ def findMissingUtil(arr, low, high, diff):
 
     return (findMissingUtil(arr, low,
                             mid - 1, diff). mid - 1)
-
-
-# def findMissing(arr, n):
-
-#     # Binary search
-#     return findMissingUtil(arr, 0, n - 1, int((arr[n - 1] - arr[0]) / n))
 
 
 if __name__ == "__main__":
@@ -54,7 +48,7 @@ if __name__ == "__main__":
             # TODO: This will not solve the stage 2 of this question
             pass
         elif len(row) == 2:
-            val, index = findMissingUtil(row, 0, len(
+            val, index = find(row, 0, len(
                 row) - 1, int((row[len(row) - 1] - row[0]) / len(row)))
 
             if index == -1:
