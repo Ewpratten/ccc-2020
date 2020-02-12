@@ -1,23 +1,35 @@
-import re
+## Itertools SRC ##
+def pm(iterable):
+    pool = tuple(iterable)
+    n = len(pool)
+    r = n
+    
+    indices = list(range(n))
+    cycles = list(range(n, n-r, -1))
+    yield tuple(pool[i] for i in indices[:r])
 
+    # Tracker for duplicates
+    seen = set()
+    seen.add(tuple(pool[i] for i in indices[:r]))
 
-def findPerms(first_str, second_str):
+    while n:
+        for i in reversed(range(r)):
+            cycles[i] -= 1
+            if cycles[i] == 0:
+                indices[i:] = indices[i+1:] + indices[i:i+1]
+                cycles[i] = n - i
+            else:
+                j = cycles[i]
+                indices[i], indices[-j] = indices[-j], indices[i]
 
-    # Handle max recursion
-    if not first_str:
-        yield second_str
-        return
-    if not second_str:
-        yield first_str
-        return
+                pm_str = tuple(pool[i] for i in indices[:r])
+                if not (pm_str in seen or seen.add(pm_str)):
+                    yield pm_str
+                break
+        else:
+            return
 
-    # Find the first set
-    for result in findPerms(first_str[1:], second_str):
-        yield first_str[0] + result
-
-    # Find the second set
-    for result in findPerms(first_str, second_str[1:]):
-        yield second_str[0] + result
+## Main Program ##
 
 
 # Read the needle
@@ -26,15 +38,12 @@ needle: str = input("")
 # Read the haystack
 haystack: str = input("")
 
-# Find all permutations of the needle
-if(len(needle) > 1):
-    permutations = list(findPerms(needle[:-1], needle[-1:]))
-else:
-    permutations = [needle]
-
 # Count the number of occurrences of each permutation
 total: int = 0
-for permutation in permutations:
-    total += 1 if len(re.findall(permutation, haystack)) else 0
+for permutation in pm(needle):
+
+    # Check for occurrences of the permutation
+    if ''.join(permutation) in haystack:
+        total += 1
 
 print(total)

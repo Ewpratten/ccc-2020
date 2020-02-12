@@ -23,14 +23,10 @@ while len(grid) < line_count:
 
 # Define a tasks queue for jumps and tracker for visited points
 tasks: list = []
-visited: list = []
+seen = set()
 
 # Push the first position to the tasks list
-tasks.append({
-    "x": 0,
-    "y": 0,
-    "value": grid[0][0]
-})
+tasks.append((0, 0, grid[0][0]))
 
 
 # Handle tasks running
@@ -43,14 +39,11 @@ while len(tasks) > 0:
     except IndexError as e:
         break
 
-    # Mark this as a visited position
-    visited.append((task["x"], task["y"]))
-
     # Check all jumps
-    for jump in findJumpsForVal(grid, task["value"]):
+    for jump in findJumpsForVal(grid, task[2]):
 
         # Jump not valid if we have been there before
-        if jump in visited:
+        if (jump in seen or seen.add(jump)):
             continue
 
         # If the jump is the end, we have finished
@@ -59,11 +52,7 @@ while len(tasks) > 0:
             exit(0)
 
         # Otherwise, add the jump to the list of points
-        tasks.append({
-            "x": jump[0],
-            "y": jump[1],
-            "value": grid[jump[0]][jump[1]]
-        })
+        tasks.append((jump[0], jump[1], grid[jump[0]][jump[1]]))
 
 
 # If tasks runs out, we can not finish the room
