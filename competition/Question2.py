@@ -46,14 +46,10 @@ while len(tasks) > 0:
     # Mark this as a visited position
     visited.append((task["x"], task["y"]))
 
-    # Find all allowed jumps
-    jumps: list = list(findJumpsForVal(grid, task["value"]))
-
     # Check all jumps
-    for jump in jumps:
+    for jump in findJumpsForVal(grid, task["value"]):
 
         # Jump not valid if we have been there before
-        # print(visited)
         if jump in visited:
             continue
 
