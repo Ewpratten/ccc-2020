@@ -32,9 +32,6 @@ if(len(needle) > 1):
 else:
     permutations = [needle]
 
-# The last element is a dupe of the first
-permutations.pop(0)
-
 # Count the number of occurrences of each permutation
 total: int = 0
 for permutation in permutations:
